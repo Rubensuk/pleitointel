@@ -1,5 +1,7 @@
 "use client";
 
+import PainelInsights from "@/components/ai/PainelInsights";
+
 const dadosComparativo = [
   {
     secao: "0001 - Centro",
@@ -49,6 +51,9 @@ export default function ConfrontoPage() {
           Comparativo direto de desempenho voto a voto entre candidatos por seção e região.
         </p>
       </div>
+
+      {/* Camada de Inteligência Artificial */}
+      <PainelInsights tipo="confronto" dadosContexto={dadosComparativo} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="rounded-xl border border-blue-500/20 bg-blue-950/20 p-5">

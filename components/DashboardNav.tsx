@@ -3,15 +3,20 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+interface DashboardNavProps {
+  email?: string;
+}
+
 const navItems = [
   { label: "Painel", href: "/dashboard" },
   { label: "Diagnóstico territorial", href: "/dashboard/mapa" },
   { label: "Projeções eleitorais", href: "/dashboard/projecoes" },
   { label: "Simulador de viabilidade", href: "/dashboard/viabilidade" },
+  { label: "Confronto de candidatos", href: "/dashboard/confronto" },
   { label: "Relatórios & Exportação", href: "/dashboard/relatorios" },
 ];
 
-export default function DashboardNav() {
+export default function DashboardNav({ email }: DashboardNavProps) {
   const pathname = usePathname();
 
   return (
@@ -42,10 +47,15 @@ export default function DashboardNav() {
         </nav>
       </div>
 
-      <div className="border-t border-white/10 pt-4 px-3">
+      <div className="border-t border-white/10 pt-4 px-3 space-y-2">
+        {email && (
+          <p className="text-[11px] font-mono text-slate-400 truncate" title={email}>
+            {email}
+          </p>
+        )}
         <Link
           href="/login"
-          className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
+          className="inline-block text-xs text-slate-500 hover:text-slate-300 transition-colors"
         >
           ← Sair
         </Link>
