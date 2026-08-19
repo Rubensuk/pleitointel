@@ -3,7 +3,48 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import PainelInsights from "@/components/ai/PainelInsights";
-import { Candidato, FeatureCollectionGenerica, SecaoVotacaoProps, AreaDemografiaProps } from "@/types";
+
+// Interfaces locais independentes para garantir build 100% limpo
+interface Candidato {
+  id: string;
+  nome: string;
+  numero: number;
+  partido: string;
+  votos: number;
+  percentual: number;
+  cor: string;
+}
+
+interface SecaoVotacaoProps {
+  secao_id: string;
+  zona: string;
+  secao: string;
+  local_votacao: string;
+  total_votos: number;
+  abstencao_pct: number;
+  candidatos: Record<string, { votos: number; pct: number }>;
+}
+
+interface AreaDemografiaProps {
+  bairro_id: string;
+  nome_bairro: string;
+  populacao_total: number;
+  renda_media_salarios: number;
+  faixa_etaria_predominante: string;
+  grau_escolaridade_superior_pct: number;
+}
+
+interface FeatureCollectionGenerica<T> {
+  type: "FeatureCollection";
+  features: Array<{
+    type: "Feature";
+    geometry: {
+      type: string;
+      coordinates: any;
+    };
+    properties: T;
+  }>;
+}
 
 const MapaEleitoral = dynamic(() => import("@/components/MapaEleitoral"), {
   ssr: false,
@@ -14,7 +55,6 @@ const MapaEleitoral = dynamic(() => import("@/components/MapaEleitoral"), {
   ),
 });
 
-// Mock de dados territoriais iniciais para renderização do mapa
 const mockCandidatos: Candidato[] = [
   { id: "cand_1", nome: "Candidato Principal", numero: 10, partido: "PARTIDO A", votos: 18450, percentual: 34.2, cor: "#f97316" },
   { id: "cand_2", nome: "Adversário Direto", numero: 20, partido: "PARTIDO B", votos: 15320, percentual: 28.4, cor: "#3b82f6" },
@@ -101,7 +141,6 @@ export default function MapaPage() {
           </p>
         </div>
 
-        {/* Filtro rápido de candidato */}
         <div className="flex items-center gap-3">
           <label className="text-xs text-slate-400 font-medium">Visualizar candidato:</label>
           <select
@@ -121,7 +160,7 @@ export default function MapaPage() {
       {/* Assistente IA - Leitura Estratégica do Mapa */}
       <PainelInsights tipo="mapa" />
 
-      {/* Camada do Mapa Interativo com Props Completas */}
+      {/* Camada do Mapa Interativo */}
       <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-4 overflow-hidden">
         <MapaEleitoral
           votacao={mockVotacao}
