@@ -15,8 +15,8 @@ const MapaEleitoral = dynamic(() => import("@/components/MapaEleitoral"), {
 });
 
 const mockCandidatos: Candidato[] = [
-  { id: "cand_1", nome: "Candidato Principal", numero: 10, partido: "PARTIDO A", votos: 18450, percentual: 34.2, cor: "#f97316" },
-  { id: "cand_2", nome: "Adversário Direto", numero: 20, partido: "PARTIDO B", votos: 15320, percentual: 28.4, cor: "#3b82f6" },
+  { id: "cand_1", nome: "Candidato Principal", numero: "10", partido: "PARTIDO A", votos: 18450, percentual: 34.2, cor: "#f97316" },
+  { id: "cand_2", nome: "Adversário Direto", numero: "20", partido: "PARTIDO B", votos: 15320, percentual: 28.4, cor: "#3b82f6" },
 ];
 
 const mockVotacao: FeatureCollectionGenerica<SecaoVotacaoProps> = {
@@ -24,7 +24,7 @@ const mockVotacao: FeatureCollectionGenerica<SecaoVotacaoProps> = {
   features: [
     {
       type: "Feature",
-      geometry: { type: "Point", coordinates: [-48.2045, -7.1923] },
+      geometry: { type: "Point", coordinates: [-48.2045, -7.1923] } as any,
       properties: {
         codigoSecao: "0012",
         zona: "001",
@@ -43,7 +43,7 @@ const mockVotacao: FeatureCollectionGenerica<SecaoVotacaoProps> = {
     },
     {
       type: "Feature",
-      geometry: { type: "Point", coordinates: [-48.198, -7.185] },
+      geometry: { type: "Point", coordinates: [-48.198, -7.185] } as any,
       properties: {
         codigoSecao: "0013",
         zona: "001",
@@ -79,7 +79,7 @@ const mockDemografia: FeatureCollectionGenerica<AreaDemografiaProps> = {
             [-48.22, -7.21],
           ],
         ],
-      },
+      } as any,
       properties: {
         bairro: "Centro",
         municipioIbge: "1702109",
