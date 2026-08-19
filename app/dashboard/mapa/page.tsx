@@ -3,48 +3,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import PainelInsights from "@/components/ai/PainelInsights";
-
-// Interfaces locais independentes para garantir build 100% limpo
-interface Candidato {
-  id: string;
-  nome: string;
-  numero: number;
-  partido: string;
-  votos: number;
-  percentual: number;
-  cor: string;
-}
-
-interface SecaoVotacaoProps {
-  secao_id: string;
-  zona: string;
-  secao: string;
-  local_votacao: string;
-  total_votos: number;
-  abstencao_pct: number;
-  candidatos: Record<string, { votos: number; pct: number }>;
-}
-
-interface AreaDemografiaProps {
-  bairro_id: string;
-  nome_bairro: string;
-  populacao_total: number;
-  renda_media_salarios: number;
-  faixa_etaria_predominante: string;
-  grau_escolaridade_superior_pct: number;
-}
-
-interface FeatureCollectionGenerica<T> {
-  type: "FeatureCollection";
-  features: Array<{
-    type: "Feature";
-    geometry: {
-      type: string;
-      coordinates: any;
-    };
-    properties: T;
-  }>;
-}
+import { Candidato, FeatureCollectionGenerica, SecaoVotacaoProps, AreaDemografiaProps } from "@/lib/types";
 
 const MapaEleitoral = dynamic(() => import("@/components/MapaEleitoral"), {
   ssr: false,
@@ -67,33 +26,39 @@ const mockVotacao: FeatureCollectionGenerica<SecaoVotacaoProps> = {
       type: "Feature",
       geometry: { type: "Point", coordinates: [-48.2045, -7.1923] },
       properties: {
-        secao_id: "sec_001",
+        codigoSecao: "0012",
         zona: "001",
         secao: "0012",
-        local_votacao: "Colégio Estadual Central",
-        total_votos: 1420,
-        abstencao_pct: 14.5,
-        candidatos: {
-          cand_1: { votos: 650, pct: 45.7 },
-          cand_2: { votos: 480, pct: 33.8 },
+        bairro: "Centro",
+        municipioIbge: "1702109",
+        localVotacao: "Colégio Estadual Central",
+        totalEleitoresAptos: 1650,
+        totalVotosValidos: 1420,
+        taxaAbstencao: 14.5,
+        votosPorCandidato: {
+          cand_1: { votos: 650, percentual: 45.7 },
+          cand_2: { votos: 480, percentual: 33.8 },
         },
-      },
+      } as any,
     },
     {
       type: "Feature",
       geometry: { type: "Point", coordinates: [-48.198, -7.185] },
       properties: {
-        secao_id: "sec_002",
+        codigoSecao: "0013",
         zona: "001",
         secao: "0013",
-        local_votacao: "Escola Municipal Norte",
-        total_votos: 1180,
-        abstencao_pct: 18.2,
-        candidatos: {
-          cand_1: { votos: 390, pct: 33.0 },
-          cand_2: { votos: 520, pct: 44.0 },
+        bairro: "Setor Norte",
+        municipioIbge: "1702109",
+        localVotacao: "Escola Municipal Norte",
+        totalEleitoresAptos: 1400,
+        totalVotosValidos: 1180,
+        taxaAbstencao: 18.2,
+        votosPorCandidato: {
+          cand_1: { votos: 390, percentual: 33.0 },
+          cand_2: { votos: 520, percentual: 44.0 },
         },
-      },
+      } as any,
     },
   ],
 };
@@ -116,13 +81,13 @@ const mockDemografia: FeatureCollectionGenerica<AreaDemografiaProps> = {
         ],
       },
       properties: {
-        bairro_id: "bairro_central",
-        nome_bairro: "Região Central",
-        populacao_total: 45200,
-        renda_media_salarios: 3.8,
-        faixa_etaria_predominante: "25-44 anos",
-        grau_escolaridade_superior_pct: 32.5,
-      },
+        bairro: "Centro",
+        municipioIbge: "1702109",
+        populacaoTotal: 45200,
+        rendaMedia: 3.8,
+        faixaEtariaPredominante: "25-44 anos",
+        escolaridadeSuperiorPct: 32.5,
+      } as any,
     },
   ],
 };
