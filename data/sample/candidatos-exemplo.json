@@ -1,0 +1,4 @@
+[
+  { "id": "cand-a", "nome": "Candidato A", "numero": "13", "partidoSigla": "PT1", "cargo": "PRESIDENTE", "cor": "#3b82f6" },
+  { "id": "cand-b", "nome": "Candidato B", "numero": "22", "partidoSigla": "PT2", "cargo": "PRESIDENTE", "cor": "#ef4444" }
+]

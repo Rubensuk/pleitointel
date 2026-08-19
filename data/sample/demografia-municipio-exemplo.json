@@ -1,0 +1,35 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "codigoArea": "0001", "bairro": "Centro", "municipioIbge": "1700251", "populacao": 4200, "densidadeHabKm2": 5800, "rendaMediaDomiciliar": 3100 },
+      "geometry": { "type": "Polygon", "coordinates": [[[-48.129, -5.635], [-48.121, -5.635], [-48.121, -5.628], [-48.129, -5.628], [-48.129, -5.635]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "codigoArea": "0002", "bairro": "Novo Horizonte", "municipioIbge": "1700251", "populacao": 3100, "densidadeHabKm2": 4200, "rendaMediaDomiciliar": 1850 },
+      "geometry": { "type": "Polygon", "coordinates": [[[-48.121, -5.635], [-48.113, -5.635], [-48.113, -5.628], [-48.121, -5.628], [-48.121, -5.635]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "codigoArea": "0003", "bairro": "Sao Sebastiao", "municipioIbge": "1700251", "populacao": 3650, "densidadeHabKm2": 3900, "rendaMediaDomiciliar": 2400 },
+      "geometry": { "type": "Polygon", "coordinates": [[[-48.129, -5.628], [-48.121, -5.628], [-48.121, -5.621], [-48.129, -5.621], [-48.129, -5.628]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "codigoArea": "0004", "bairro": "Boa Vista", "municipioIbge": "1700251", "populacao": 2700, "densidadeHabKm2": 3100, "rendaMediaDomiciliar": 1620 },
+      "geometry": { "type": "Polygon", "coordinates": [[[-48.121, -5.628], [-48.113, -5.628], [-48.113, -5.621], [-48.121, -5.621], [-48.121, -5.628]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "codigoArea": "0005", "bairro": "Setor Industrial", "municipioIbge": "1700251", "populacao": 1950, "densidadeHabKm2": 1800, "rendaMediaDomiciliar": 2050 },
+      "geometry": { "type": "Polygon", "coordinates": [[[-48.129, -5.621], [-48.121, -5.621], [-48.121, -5.614], [-48.129, -5.614], [-48.129, -5.621]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "codigoArea": "0006", "bairro": "Beira Rio", "municipioIbge": "1700251", "populacao": 2280, "densidadeHabKm2": 2500, "rendaMediaDomiciliar": 2900 },
+      "geometry": { "type": "Polygon", "coordinates": [[[-48.121, -5.621], [-48.113, -5.621], [-48.113, -5.614], [-48.121, -5.614], [-48.121, -5.621]]] }
+    }
+  ]
+}

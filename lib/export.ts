@@ -1,0 +1,38 @@
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import * as XLSX from "xlsx";
+
+// Exportar para Excel (.xlsx)
+export function exportarParaExcel(dados: any[], nomeArquivo: string) {
+  const worksheet = XLSX.utils.json_to_sheet(dados);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Diagnostico");
+  XLSX.writeFile(workbook, `${nomeArquivo}.xlsx`);
+}
+
+// Exportar para PDF (.pdf)
+export function exportarParaPDF(
+  titulo: string,
+  colunas: string[],
+  linhas: any[][],
+  nomeArquivo: string
+) {
+  const doc = new jsPDF();
+
+  doc.setFontSize(16);
+  doc.text(titulo, 14, 18);
+  doc.setFontSize(10);
+  doc.setTextColor(100);
+  doc.text(`Gerado em: ${new Date().toLocaleDateString("pt-BR")}`, 14, 25);
+
+  autoTable(doc, {
+    head: [colunas],
+    body: linhas,
+    startY: 30,
+    theme: "grid",
+    headStyles: { fillColor: [15, 23, 42] },
+    styles: { fontSize: 9 },
+  });
+
+  doc.save(`${nomeArquivo}.pdf`);
+}

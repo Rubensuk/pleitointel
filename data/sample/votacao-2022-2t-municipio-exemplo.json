@@ -1,0 +1,107 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "codigoSecao": "0001",
+        "zona": "001",
+        "bairro": "Centro",
+        "municipioIbge": "1700251",
+        "totalVotosValidos": 1240,
+        "votosPorCandidato": { "cand-a": 690, "cand-b": 550 },
+        "candidatoVencedorId": "cand-a",
+        "percentualVencedor": 55.6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-48.129, -5.635], [-48.121, -5.635], [-48.121, -5.628], [-48.129, -5.628], [-48.129, -5.635]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigoSecao": "0002",
+        "zona": "001",
+        "bairro": "Novo Horizonte",
+        "municipioIbge": "1700251",
+        "totalVotosValidos": 980,
+        "votosPorCandidato": { "cand-a": 410, "cand-b": 570 },
+        "candidatoVencedorId": "cand-b",
+        "percentualVencedor": 58.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-48.121, -5.635], [-48.113, -5.635], [-48.113, -5.628], [-48.121, -5.628], [-48.121, -5.635]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigoSecao": "0003",
+        "zona": "001",
+        "bairro": "Sao Sebastiao",
+        "municipioIbge": "1700251",
+        "totalVotosValidos": 1105,
+        "votosPorCandidato": { "cand-a": 640, "cand-b": 465 },
+        "candidatoVencedorId": "cand-a",
+        "percentualVencedor": 57.9
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-48.129, -5.628], [-48.121, -5.628], [-48.121, -5.621], [-48.129, -5.621], [-48.129, -5.628]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigoSecao": "0004",
+        "zona": "001",
+        "bairro": "Boa Vista",
+        "municipioIbge": "1700251",
+        "totalVotosValidos": 870,
+        "votosPorCandidato": { "cand-a": 350, "cand-b": 520 },
+        "candidatoVencedorId": "cand-b",
+        "percentualVencedor": 59.8
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-48.121, -5.628], [-48.113, -5.628], [-48.113, -5.621], [-48.121, -5.621], [-48.121, -5.628]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigoSecao": "0005",
+        "zona": "002",
+        "bairro": "Setor Industrial",
+        "municipioIbge": "1700251",
+        "totalVotosValidos": 640,
+        "votosPorCandidato": { "cand-a": 300, "cand-b": 340 },
+        "candidatoVencedorId": "cand-b",
+        "percentualVencedor": 53.1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-48.129, -5.621], [-48.121, -5.621], [-48.121, -5.614], [-48.129, -5.614], [-48.129, -5.621]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigoSecao": "0006",
+        "zona": "002",
+        "bairro": "Beira Rio",
+        "municipioIbge": "1700251",
+        "totalVotosValidos": 715,
+        "votosPorCandidato": { "cand-a": 455, "cand-b": 260 },
+        "candidatoVencedorId": "cand-a",
+        "percentualVencedor": 63.6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-48.121, -5.621], [-48.113, -5.621], [-48.113, -5.614], [-48.121, -5.614], [-48.121, -5.621]]]
+      }
+    }
+  ]
+}

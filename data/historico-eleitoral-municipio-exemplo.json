@@ -1,0 +1,59 @@
+{
+  "municipioIbge": "1700251",
+  "secoes": [
+    {
+      "codigoSecao": "0001",
+      "bairro": "Centro",
+      "historico": [
+        { "ano": 2016, "totalVotosValidos": 1000, "votosPorCandidato": { "cand-a": 490, "cand-b": 510 }, "candidatoVencedorId": "cand-b", "percentualVencedor": 51.0 },
+        { "ano": 2020, "totalVotosValidos": 1150, "votosPorCandidato": { "cand-a": 610, "cand-b": 540 }, "candidatoVencedorId": "cand-a", "percentualVencedor": 53.0 },
+        { "ano": 2022, "totalVotosValidos": 1240, "votosPorCandidato": { "cand-a": 690, "cand-b": 550 }, "candidatoVencedorId": "cand-a", "percentualVencedor": 55.6 }
+      ]
+    },
+    {
+      "codigoSecao": "0002",
+      "bairro": "Novo Horizonte",
+      "historico": [
+        { "ano": 2016, "totalVotosValidos": 900, "votosPorCandidato": { "cand-a": 360, "cand-b": 540 }, "candidatoVencedorId": "cand-b", "percentualVencedor": 60.0 },
+        { "ano": 2020, "totalVotosValidos": 950, "votosPorCandidato": { "cand-a": 390, "cand-b": 560 }, "candidatoVencedorId": "cand-b", "percentualVencedor": 58.9 },
+        { "ano": 2022, "totalVotosValidos": 980, "votosPorCandidato": { "cand-a": 410, "cand-b": 570 }, "candidatoVencedorId": "cand-b", "percentualVencedor": 58.2 }
+      ]
+    },
+    {
+      "codigoSecao": "0003",
+      "bairro": "Sao Sebastiao",
+      "historico": [
+        { "ano": 2016, "totalVotosValidos": 1000, "votosPorCandidato": { "cand-a": 540, "cand-b": 460 }, "candidatoVencedorId": "cand-a", "percentualVencedor": 54.0 },
+        { "ano": 2020, "totalVotosValidos": 1050, "votosPorCandidato": { "cand-a": 588, "cand-b": 462 }, "candidatoVencedorId": "cand-a", "percentualVencedor": 56.0 },
+        { "ano": 2022, "totalVotosValidos": 1105, "votosPorCandidato": { "cand-a": 640, "cand-b": 465 }, "candidatoVencedorId": "cand-a", "percentualVencedor": 57.9 }
+      ]
+    },
+    {
+      "codigoSecao": "0004",
+      "bairro": "Boa Vista",
+      "historico": [
+        { "ano": 2016, "totalVotosValidos": 800, "votosPorCandidato": { "cand-a": 304, "cand-b": 496 }, "candidatoVencedorId": "cand-b", "percentualVencedor": 62.0 },
+        { "ano": 2020, "totalVotosValidos": 840, "votosPorCandidato": { "cand-a": 328, "cand-b": 512 }, "candidatoVencedorId": "cand-b", "percentualVencedor": 61.0 },
+        { "ano": 2022, "totalVotosValidos": 870, "votosPorCandidato": { "cand-a": 350, "cand-b": 520 }, "candidatoVencedorId": "cand-b", "percentualVencedor": 59.8 }
+      ]
+    },
+    {
+      "codigoSecao": "0005",
+      "bairro": "Setor Industrial",
+      "historico": [
+        { "ano": 2016, "totalVotosValidos": 600, "votosPorCandidato": { "cand-a": 303, "cand-b": 297 }, "candidatoVencedorId": "cand-a", "percentualVencedor": 50.5 },
+        { "ano": 2020, "totalVotosValidos": 620, "votosPorCandidato": { "cand-a": 299, "cand-b": 321 }, "candidatoVencedorId": "cand-b", "percentualVencedor": 51.8 },
+        { "ano": 2022, "totalVotosValidos": 640, "votosPorCandidato": { "cand-a": 300, "cand-b": 340 }, "candidatoVencedorId": "cand-b", "percentualVencedor": 53.1 }
+      ]
+    },
+    {
+      "codigoSecao": "0006",
+      "bairro": "Beira Rio",
+      "historico": [
+        { "ano": 2016, "totalVotosValidos": 650, "votosPorCandidato": { "cand-a": 390, "cand-b": 260 }, "candidatoVencedorId": "cand-a", "percentualVencedor": 60.0 },
+        { "ano": 2020, "totalVotosValidos": 690, "votosPorCandidato": { "cand-a": 428, "cand-b": 262 }, "candidatoVencedorId": "cand-a", "percentualVencedor": 62.0 },
+        { "ano": 2022, "totalVotosValidos": 715, "votosPorCandidato": { "cand-a": 455, "cand-b": 260 }, "candidatoVencedorId": "cand-a", "percentualVencedor": 63.6 }
+      ]
+    }
+  ]
+}
