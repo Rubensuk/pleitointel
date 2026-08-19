@@ -3,7 +3,6 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import PainelInsights from "@/components/ai/PainelInsights";
-import { Candidato, FeatureCollectionGenerica, SecaoVotacaoProps, AreaDemografiaProps } from "@/lib/types";
 
 const MapaEleitoral = dynamic(() => import("@/components/MapaEleitoral"), {
   ssr: false,
@@ -14,17 +13,17 @@ const MapaEleitoral = dynamic(() => import("@/components/MapaEleitoral"), {
   ),
 });
 
-const mockCandidatos: Candidato[] = [
-  { id: "cand_1", nome: "Candidato Principal", numero: "10", partido: "PARTIDO A", votos: 18450, percentual: 34.2, cor: "#f97316" },
-  { id: "cand_2", nome: "Adversário Direto", numero: "20", partido: "PARTIDO B", votos: 15320, percentual: 28.4, cor: "#3b82f6" },
+const mockCandidatos: any[] = [
+  { id: "cand_1", nome: "Candidato Principal", numero: "10", siglaPartido: "PARTIDO A", votos: 18450, percentual: 34.2, cor: "#f97316" },
+  { id: "cand_2", nome: "Adversário Direto", numero: "20", siglaPartido: "PARTIDO B", votos: 15320, percentual: 28.4, cor: "#3b82f6" },
 ];
 
-const mockVotacao: FeatureCollectionGenerica<SecaoVotacaoProps> = {
+const mockVotacao: any = {
   type: "FeatureCollection",
   features: [
     {
       type: "Feature",
-      geometry: { type: "Point", coordinates: [-48.2045, -7.1923] } as any,
+      geometry: { type: "Point", coordinates: [-48.2045, -7.1923] },
       properties: {
         codigoSecao: "0012",
         zona: "001",
@@ -39,11 +38,11 @@ const mockVotacao: FeatureCollectionGenerica<SecaoVotacaoProps> = {
           cand_1: { votos: 650, percentual: 45.7 },
           cand_2: { votos: 480, percentual: 33.8 },
         },
-      } as any,
+      },
     },
     {
       type: "Feature",
-      geometry: { type: "Point", coordinates: [-48.198, -7.185] } as any,
+      geometry: { type: "Point", coordinates: [-48.198, -7.185] },
       properties: {
         codigoSecao: "0013",
         zona: "001",
@@ -58,12 +57,12 @@ const mockVotacao: FeatureCollectionGenerica<SecaoVotacaoProps> = {
           cand_1: { votos: 390, percentual: 33.0 },
           cand_2: { votos: 520, percentual: 44.0 },
         },
-      } as any,
+      },
     },
   ],
 };
 
-const mockDemografia: FeatureCollectionGenerica<AreaDemografiaProps> = {
+const mockDemografia: any = {
   type: "FeatureCollection",
   features: [
     {
@@ -79,7 +78,7 @@ const mockDemografia: FeatureCollectionGenerica<AreaDemografiaProps> = {
             [-48.22, -7.21],
           ],
         ],
-      } as any,
+      },
       properties: {
         bairro: "Centro",
         municipioIbge: "1702109",
@@ -87,7 +86,7 @@ const mockDemografia: FeatureCollectionGenerica<AreaDemografiaProps> = {
         rendaMedia: 3.8,
         faixaEtariaPredominante: "25-44 anos",
         escolaridadeSuperiorPct: 32.5,
-      } as any,
+      },
     },
   ],
 };
@@ -115,7 +114,7 @@ export default function MapaPage() {
           >
             {mockCandidatos.map((c) => (
               <option key={c.id} value={c.id}>
-                {c.nome} ({c.partido})
+                {c.nome} ({c.siglaPartido || c.partido || "Candidato"})
               </option>
             ))}
           </select>
