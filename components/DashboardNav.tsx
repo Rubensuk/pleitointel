@@ -8,58 +8,57 @@ interface DashboardNavProps {
 }
 
 const navItems = [
-  { label: "Painel", href: "/dashboard" },
-  { label: "Diagnóstico territorial", href: "/dashboard/mapa" },
-  { label: "Projeções eleitorais", href: "/dashboard/projecoes" },
-  { label: "Simulador de viabilidade", href: "/dashboard/viabilidade" },
-  { label: "Confronto de candidatos", href: "/dashboard/confronto" },
-  { label: "Relatórios & Exportação", href: "/dashboard/relatorios" },
+  { label: "Visão Geral", href: "/dashboard" },
+  { label: "Diagnóstico Territorial", href: "/dashboard/mapa" },
+  { label: "Projeções", href: "/dashboard/projecoes" },
+  { label: "Confronto", href: "/dashboard/confronto" },
+  { label: "Viabilidade", href: "/dashboard/viabilidade" },
+  { label: "CRM Territorial", href: "/dashboard/crm-territorial" },
+  { label: "Relatórios & IA", href: "/dashboard/relatorios" },
 ];
 
 export default function DashboardNav({ email }: DashboardNavProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 min-h-screen border-r border-white/10 bg-slate-950 p-4 flex flex-col justify-between">
-      <div className="space-y-6">
-        <div className="px-3 py-2">
-          <span className="text-orange-500 font-bold tracking-wider text-sm">PLEITO</span>
-          <span className="text-white font-bold tracking-wider text-sm">INTEL</span>
+    <header className="border-b border-white/10 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="flex items-center gap-8">
+          <Link href="/" className="font-mono font-bold text-orange-500 tracking-wider text-sm">
+            PLEITOINTEL
+          </Link>
+          <nav className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => {
+              const active = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                    active
+                      ? "bg-white/10 text-white"
+                      : "text-slate-400 hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
         </div>
 
-        <nav className="space-y-1">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                  isActive
-                    ? "bg-orange-500/10 text-orange-400 font-medium"
-                    : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
-                }`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
+        <div className="flex items-center gap-3">
+          {email && (
+            <span className="text-xs text-slate-400 font-mono hidden sm:inline-block">
+              {email}
+            </span>
+          )}
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            Enterprise
+          </span>
+        </div>
       </div>
-
-      <div className="border-t border-white/10 pt-4 px-3 space-y-2">
-        {email && (
-          <p className="text-[11px] font-mono text-slate-400 truncate" title={email}>
-            {email}
-          </p>
-        )}
-        <Link
-          href="/login"
-          className="inline-block text-xs text-slate-500 hover:text-slate-300 transition-colors"
-        >
-          ← Sair
-        </Link>
-      </div>
-    </aside>
+    </header>
   );
 }

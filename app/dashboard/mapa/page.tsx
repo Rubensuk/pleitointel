@@ -3,6 +3,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import PainelInsights from "@/components/ai/PainelInsights";
+import MicrodirecionamentoCard from "@/components/ai/MicrodirecionamentoCard";
 
 const MapaEleitoral = dynamic(() => import("@/components/MapaEleitoral"), {
   ssr: false,
@@ -93,36 +94,38 @@ const mockDemografia: any = {
 
 export default function MapaPage() {
   const [candidatoSelecionado, setCandidatoSelecionado] = useState<string>("cand_1");
+  const [bairroFoco, setBairroFoco] = useState<string>("Centro");
 
   return (
     <div className="p-8 space-y-6 bg-slate-950 text-white min-h-screen">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <p className="font-mono text-xs tracking-widest text-slate-500">MÓDULO 1</p>
-          <h1 className="mt-1 text-2xl font-bold">Diagnóstico Territorial</h1>
+          <p className="font-mono text-xs tracking-widest text-slate-500">MÓDULO 1 & MÓDULO 6</p>
+          <h1 className="mt-1 text-2xl font-bold">Diagnóstico Territorial & Microdirecionamento</h1>
           <p className="text-slate-400 text-sm">
-            Mapeamento geoespacial de densidade de votos, locais de votação e taxas de abstenção.
+            Mapeamento geoespacial e geração de pautas de discurso por setor.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <label className="text-xs text-slate-400 font-medium">Visualizar candidato:</label>
+          <label className="text-xs text-slate-400 font-medium">Bairro Foco:</label>
           <select
-            value={candidatoSelecionado}
-            onChange={(e) => setCandidatoSelecionado(e.target.value)}
+            value={bairroFoco}
+            onChange={(e) => setBairroFoco(e.target.value)}
             className="bg-slate-900 border border-white/10 text-xs text-white rounded-lg px-3 py-2 focus:border-orange-500 focus:outline-none"
           >
-            {mockCandidatos.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.nome} ({c.siglaPartido || c.partido || "Candidato"})
-              </option>
-            ))}
+            <option value="Centro">Centro</option>
+            <option value="Setor Norte">Setor Norte</option>
+            <option value="Vila Nova">Vila Nova</option>
           </select>
         </div>
       </div>
 
-      {/* Assistente IA - Leitura Estratégica do Mapa */}
+      {/* Assistente IA - Leitura Estratégica Geral do Mapa */}
       <PainelInsights tipo="mapa" />
+
+      {/* Módulo 6 - Microdirecionamento Narrativo Específico do Bairro */}
+      <MicrodirecionamentoCard bairroSelecionado={bairroFoco} />
 
       {/* Camada do Mapa Interativo */}
       <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-4 overflow-hidden">
