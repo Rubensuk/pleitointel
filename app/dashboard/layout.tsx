@@ -1,1 +1,27 @@
-import { redirect } from "next/navigation";`nimport { createClient } from "@/lib/supabase/server";`nimport DashboardNav from "@/components/DashboardNav";`n`nexport default async function DashboardLayout({`n  children,`n}: {`n  children: React.ReactNode;`n}) {`n  const supabase = createClient();`n  const {`n    data: { user },`n  } = await supabase.auth.getUser();`n`n  if (!user) {`n    redirect("/login");`n  }`n`n  return (`n    <div className="min-h-screen w-full flex flex-col bg-slate-950 text-slate-100">`n      <DashboardNav email={user.email ?? ""} />`n      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">`n        {children}`n      </main>`n    </div>`n  );`n}
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import DashboardNav from "@/components/DashboardNav";
+
+export default async function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  return (
+    <div className="min-h-screen w-full flex flex-col bg-slate-950 text-slate-100">
+      <DashboardNav email={user.email ?? ""} />
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {children}
+      </main>
+    </div>
+  );
+}
