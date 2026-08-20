@@ -44,6 +44,7 @@ const modulos = [
 
 export default function DashboardPage() {
   const [filtros, setFiltros] = useState<EstadoFiltros>({
+    uf: "TO",
     ano: 2024,
     cargo: "VEREADOR",
     municipioIbge: "1721000",
@@ -52,7 +53,7 @@ export default function DashboardPage() {
     partidoSigla: "",
   });
 
-  const queryUrl = `?municipio=${filtros.municipioIbge}&bairro=${encodeURIComponent(
+  const queryUrl = `?uf=${filtros.uf}&municipio=${filtros.municipioIbge}&bairro=${encodeURIComponent(
     filtros.bairro
   )}&ano=${filtros.ano}&cargo=${filtros.cargo}&candidato=${filtros.candidatoId}`;
 
@@ -66,11 +67,11 @@ export default function DashboardPage() {
           Visão Geral Estratégica
         </h1>
         <p className="text-slate-400 text-sm mt-1">
-          Defina o território e o cargo abaixo para calibrar os 5 módulos analíticos.
+          Selecione o Estado, Cidade, Bairro e Cargo para filtrar todas as análises.
         </p>
       </div>
 
-      {/* Barra de Filtros com Bairro e Cidade */}
+      {/* Barra de Filtros com Estado, Cidade e Bairro */}
       <Filtros filtros={filtros} onChange={setFiltros} />
 
       {/* Grid de Módulos */}

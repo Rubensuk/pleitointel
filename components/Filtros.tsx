@@ -3,6 +3,7 @@
 import type { Cargo, Candidato } from "@/lib/types";
 
 export interface EstadoFiltros {
+  uf: string;
   ano: number;
   cargo: Cargo;
   municipioIbge: string;
@@ -10,6 +11,62 @@ export interface EstadoFiltros {
   candidatoId: string;
   partidoSigla: string;
 }
+
+const ESTADOS = [
+  { sigla: "TO", nome: "Tocantins (TO)" },
+  { sigla: "PA", nome: "Pará (PA)" },
+  { sigla: "MA", nome: "Maranhão (MA)" },
+  { sigla: "GO", nome: "Goiás (GO)" },
+  { sigla: "SP", nome: "São Paulo (SP)" },
+  { sigla: "DF", nome: "Distrito Federal (DF)" },
+  { sigla: "MG", nome: "Minas Gerais (MG)" },
+  { sigla: "BA", nome: "Bahia (BA)" },
+];
+
+const MUNICIPIOS_POR_UF: Record<string, { value: string; label: string }[]> = {
+  TO: [
+    { value: "1721000", label: "Palmas" },
+    { value: "1702109", label: "Araguaína" },
+    { value: "1709500", label: "Gurupi" },
+    { value: "1718204", label: "Porto Nacional" },
+    { value: "1716109", label: "Paraíso do Tocantins" },
+    { value: "1701002", label: "Ananás" },
+    { value: "1702406", label: "Araguatins" },
+    { value: "1722107", label: "Xambioá" },
+  ],
+  PA: [
+    { value: "1501402", label: "Belém" },
+    { value: "1504208", label: "Marabá" },
+    { value: "1506807", label: "Santarém" },
+    { value: "1505536", label: "Parauapebas" },
+  ],
+  MA: [
+    { value: "2111300", label: "São Luís" },
+    { value: "2105302", label: "Imperatriz" },
+    { value: "2103000", label: "Caxias" },
+  ],
+  GO: [
+    { value: "5208707", label: "Goiânia" },
+    { value: "5201405", label: "Aparecida de Goiânia" },
+    { value: "5201108", label: "Anápolis" },
+  ],
+  SP: [
+    { value: "3550308", label: "São Paulo" },
+    { value: "3509502", label: "Campinas" },
+    { value: "3549805", label: "São José dos Campos" },
+  ],
+  DF: [{ value: "5300108", label: "Brasília" }],
+  MG: [{ value: "3106200", label: "Belo Horizonte" }],
+  BA: [{ value: "2927408", label: "Salvador" }],
+};
+
+const BAIRROS_EXEMPLO: Record<string, string[]> = {
+  "1721000": ["Todos os Bairros", "Plano Diretor Sul", "Plano Diretor Norte", "Taquaralto", "Aureny III", "Jardim Taquari"],
+  "1702109": ["Todos os Bairros", "Centro", "Setor Noroeste", "Setor Maracanã", "Araguaína Sul", "Cimba", "Entroncamento"],
+  "1709500": ["Todos os Bairros", "Centro", "Setor Sol Nascente", "Parque das Acácias", "Vila Nova"],
+  "1504208": ["Todos os Bairros", "Nova Marabá", "Marabá Pioneira", "Cidade Nova", "São Félix"],
+  "2105302": ["Todos os Bairros", "Centro", "Bacuri", "Nova Imperatriz", "Santa Rita"],
+};
 
 const CARGOS: { value: Cargo; label: string }[] = [
   { value: "PREFEITO", label: "Prefeito" },
@@ -21,25 +78,6 @@ const CARGOS: { value: Cargo; label: string }[] = [
   { value: "PRESIDENTE", label: "Presidente" },
 ];
 
-const MUNICIPIOS = [
-  { value: "1721000", label: "Palmas (TO)" },
-  { value: "1702109", label: "Araguaína (TO)" },
-  { value: "1709500", label: "Gurupi (TO)" },
-  { value: "1718204", label: "Porto Nacional (TO)" },
-  { value: "1716109", label: "Paraíso do Tocantins (TO)" },
-  { value: "1701002", label: "Ananás (TO)" },
-  { value: "1702406", label: "Araguatins (TO)" },
-  { value: "1722107", label: "Xambioá (TO)" },
-  { value: "1504208", label: "Marabá (PA)" },
-  { value: "2105302", label: "Imperatriz (MA)" },
-];
-
-const BAIRROS_EXEMPLO: Record<string, string[]> = {
-  "1721000": ["Todos os Bairros", "Plano Diretor Sul", "Plano Diretor Norte", "Taquaralto", "Aureny III", "Jardim Taquari"],
-  "1702109": ["Todos os Bairros", "Centro", "Setor Noroeste", "Setor Maracanã", "Araguaína Sul", "Cimba"],
-  "1709500": ["Todos os Bairros", "Centro", "Setor Sol Nascente", "Parque das Acácias", "Vila Nova"],
-};
-
 export default function Filtros({
   filtros,
   candidatos = [],
@@ -49,6 +87,7 @@ export default function Filtros({
   candidatos?: Candidato[];
   onChange: (novo: EstadoFiltros) => void;
 }) {
+  const municipiosDisponiveis = MUNICIPIOS_POR_UF[filtros.uf] || [];
   const bairrosDisponiveis = BAIRROS_EXEMPLO[filtros.municipioIbge] || [
     "Todos os Bairros",
     "Região Central",
@@ -72,18 +111,44 @@ export default function Filtros({
         <div className="flex items-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-orange-500 animate-pulse"></span>
           <span className="text-xs font-mono font-bold tracking-wider text-slate-300 uppercase">
-            Recorte de Inteligência Eleitoral
+            Recorte de Inteligência Territorial
           </span>
         </div>
         <span className="text-[11px] font-mono text-slate-400 bg-white/5 px-2.5 py-1 rounded-md border border-white/5">
-          Base: TSE & IBGE Oficial
+          Base: TSE & IBGE
         </span>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        {/* Município */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        {/* 1. Estado (UF) */}
         <div>
-          <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Cidade / Município</label>
+          <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Estado (UF)</label>
+          <select
+            className={selectClass}
+            value={filtros.uf}
+            onChange={(e) => {
+              const novaUf = e.target.value;
+              const novosMunicipios = MUNICIPIOS_POR_UF[novaUf] || [];
+              const primeiroMunicipio = novosMunicipios[0]?.value || "";
+              onChange({
+                ...filtros,
+                uf: novaUf,
+                municipioIbge: primeiroMunicipio,
+                bairro: "Todos os Bairros",
+              });
+            }}
+          >
+            {ESTADOS.map((uf) => (
+              <option key={uf.sigla} value={uf.sigla}>
+                {uf.nome}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* 2. Município */}
+        <div>
+          <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Cidade</label>
           <select
             className={selectClass}
             value={filtros.municipioIbge}
@@ -95,7 +160,7 @@ export default function Filtros({
               });
             }}
           >
-            {MUNICIPIOS.map((m) => (
+            {municipiosDisponiveis.map((m) => (
               <option key={m.value} value={m.value}>
                 {m.label}
               </option>
@@ -103,7 +168,7 @@ export default function Filtros({
           </select>
         </div>
 
-        {/* Bairro / Região */}
+        {/* 3. Bairro / Região */}
         <div>
           <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Bairro / Região</label>
           <select
@@ -119,7 +184,7 @@ export default function Filtros({
           </select>
         </div>
 
-        {/* Ano */}
+        {/* 4. Ano */}
         <div>
           <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Ano Eleição</label>
           <select
@@ -134,7 +199,7 @@ export default function Filtros({
           </select>
         </div>
 
-        {/* Cargo */}
+        {/* 5. Cargo */}
         <div>
           <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Cargo</label>
           <select
@@ -150,15 +215,15 @@ export default function Filtros({
           </select>
         </div>
 
-        {/* Candidato */}
+        {/* 6. Candidato Alvo */}
         <div>
-          <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Candidato Alvo</label>
+          <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Candidato</label>
           <select
             className={selectClass}
             value={filtros.candidatoId}
             onChange={(e) => set("candidatoId", e.target.value)}
           >
-            <option value="">Todos / Visão Geral</option>
+            <option value="">Todos / Geral</option>
             {candidatos.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.nome} ({c.numero})
