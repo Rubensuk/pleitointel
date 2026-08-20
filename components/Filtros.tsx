@@ -1,9 +1,12 @@
+"use client";
+
 import type { Cargo, Candidato } from "@/lib/types";
 
 export interface EstadoFiltros {
   ano: number;
   cargo: Cargo;
   municipioIbge: string;
+  bairro: string;
   candidatoId: string;
   partidoSigla: string;
 }
@@ -31,6 +34,12 @@ const MUNICIPIOS = [
   { value: "2105302", label: "Imperatriz (MA)" },
 ];
 
+const BAIRROS_EXEMPLO: Record<string, string[]> = {
+  "1721000": ["Todos os Bairros", "Plano Diretor Sul", "Plano Diretor Norte", "Taquaralto", "Aureny III", "Jardim Taquari"],
+  "1702109": ["Todos os Bairros", "Centro", "Setor Noroeste", "Setor Maracanã", "Araguaína Sul", "Cimba"],
+  "1709500": ["Todos os Bairros", "Centro", "Setor Sol Nascente", "Parque das Acácias", "Vila Nova"],
+};
+
 export default function Filtros({
   filtros,
   candidatos = [],
@@ -40,91 +49,123 @@ export default function Filtros({
   candidatos?: Candidato[];
   onChange: (novo: EstadoFiltros) => void;
 }) {
-  const partidos = Array.from(new Set(candidatos.map((c) => c.partidoSigla).filter(Boolean)));
+  const bairrosDisponiveis = BAIRROS_EXEMPLO[filtros.municipioIbge] || [
+    "Todos os Bairros",
+    "Região Central",
+    "Zona Norte",
+    "Zona Sul",
+    "Zona Leste",
+    "Zona Oeste",
+    "Zona Rural",
+  ];
 
   function set<K extends keyof EstadoFiltros>(key: K, value: EstadoFiltros[K]) {
     onChange({ ...filtros, [key]: value });
   }
 
   const selectClass =
-    "w-full rounded-lg border border-white/10 bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none focus:border-orange-500 transition";
+    "w-full rounded-lg border border-white/10 bg-slate-900 px-3 py-2 text-xs text-slate-100 outline-none focus:border-orange-500 transition";
 
   return (
-    <div className="grid grid-cols-2 gap-3 border border-white/10 bg-slate-950/60 p-4 rounded-xl shadow-md sm:grid-cols-3 lg:grid-cols-5 mb-6 backdrop-blur">
-      <div>
-        <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Ano</label>
-        <select
-          className={selectClass}
-          value={filtros.ano}
-          onChange={(e) => set("ano", Number(e.target.value))}
-        >
-          <option value={2024}>2024</option>
-          <option value={2022}>2022</option>
-          <option value={2020}>2020</option>
-          <option value={2018}>2018</option>
-        </select>
+    <div className="bg-slate-900/80 border border-white/10 p-5 rounded-2xl shadow-xl backdrop-blur mb-8">
+      <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/10">
+        <div className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-orange-500 animate-pulse"></span>
+          <span className="text-xs font-mono font-bold tracking-wider text-slate-300 uppercase">
+            Recorte de Inteligência Eleitoral
+          </span>
+        </div>
+        <span className="text-[11px] font-mono text-slate-400 bg-white/5 px-2.5 py-1 rounded-md border border-white/5">
+          Base: TSE & IBGE Oficial
+        </span>
       </div>
 
-      <div>
-        <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Cargo</label>
-        <select
-          className={selectClass}
-          value={filtros.cargo}
-          onChange={(e) => set("cargo", e.target.value as Cargo)}
-        >
-          {CARGOS.map((c) => (
-            <option key={c.value} value={c.value}>
-              {c.label}
-            </option>
-          ))}
-        </select>
-      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        {/* Município */}
+        <div>
+          <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Cidade / Município</label>
+          <select
+            className={selectClass}
+            value={filtros.municipioIbge}
+            onChange={(e) => {
+              onChange({
+                ...filtros,
+                municipioIbge: e.target.value,
+                bairro: "Todos os Bairros",
+              });
+            }}
+          >
+            {MUNICIPIOS.map((m) => (
+              <option key={m.value} value={m.value}>
+                {m.label}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div>
-        <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Município / Cidade</label>
-        <select
-          className={selectClass}
-          value={filtros.municipioIbge}
-          onChange={(e) => set("municipioIbge", e.target.value)}
-        >
-          {MUNICIPIOS.map((m) => (
-            <option key={m.value} value={m.value}>
-              {m.label}
-            </option>
-          ))}
-        </select>
-      </div>
+        {/* Bairro / Região */}
+        <div>
+          <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Bairro / Região</label>
+          <select
+            className={selectClass}
+            value={filtros.bairro}
+            onChange={(e) => set("bairro", e.target.value)}
+          >
+            {bairrosDisponiveis.map((b) => (
+              <option key={b} value={b}>
+                {b}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div>
-        <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Candidato</label>
-        <select
-          className={selectClass}
-          value={filtros.candidatoId}
-          onChange={(e) => set("candidatoId", e.target.value)}
-        >
-          <option value="">Todos os Candidatos</option>
-          {candidatos.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.nome} ({c.numero})
-            </option>
-          ))}
-        </select>
-      </div>
+        {/* Ano */}
+        <div>
+          <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Ano Eleição</label>
+          <select
+            className={selectClass}
+            value={filtros.ano}
+            onChange={(e) => set("ano", Number(e.target.value))}
+          >
+            <option value={2024}>2024 (Municipal)</option>
+            <option value={2022}>2022 (Geral)</option>
+            <option value={2020}>2020 (Municipal)</option>
+            <option value={2018}>2018 (Geral)</option>
+          </select>
+        </div>
 
-      <div>
-        <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Partido</label>
-        <select
-          className={selectClass}
-          value={filtros.partidoSigla}
-          onChange={(e) => set("partidoSigla", e.target.value)}
-        >
-          <option value="">Todos os Partidos</option>
-          {partidos.map((p) => (
-            <option key={p} value={p}>
-              {p}
-            </option>
-          ))}
-        </select>
+        {/* Cargo */}
+        <div>
+          <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Cargo</label>
+          <select
+            className={selectClass}
+            value={filtros.cargo}
+            onChange={(e) => set("cargo", e.target.value as Cargo)}
+          >
+            {CARGOS.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Candidato */}
+        <div>
+          <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-slate-400">Candidato Alvo</label>
+          <select
+            className={selectClass}
+            value={filtros.candidatoId}
+            onChange={(e) => set("candidatoId", e.target.value)}
+          >
+            <option value="">Todos / Visão Geral</option>
+            {candidatos.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.nome} ({c.numero})
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     </div>
   );
