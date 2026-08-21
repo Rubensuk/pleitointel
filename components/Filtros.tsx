@@ -28,18 +28,8 @@ const MUNICIPIOS_FALLBACK: Record<string, { value: string; label: string }[]> = 
   ],
 };
 
-const MUNICIPIOS_POR_UF: Record<string, { value: string; label: string }[]> = {
-  TO: [
-    { value: "1721000", label: "Palmas" },
-    { value: "1702109", label: "Araguaína" },
-    { value: "1709500", label: "Gurupi" },
-    { value: "1718204", label: "Porto Nacional" },
-    { value: "1716109", label: "Paraíso do Tocantins" },
-    { value: "1701002", label: "Ananás" },
-    { value: "1702406", label: "Araguatins" },
-    { value: "1722107", label: "Xambioá" },
-  ],
-};
+
+
 
 // Cargos que abrangem o estado inteiro (não se limitam a um único município)
 export const CARGOS_ESTADUAIS: Cargo[] = [
