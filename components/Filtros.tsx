@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { Cargo, Candidato } from "@/lib/types";
 
 export interface EstadoFiltros {
@@ -12,16 +13,20 @@ export interface EstadoFiltros {
   partidoSigla: string;
 }
 
-const ESTADOS = [
+// Fallback estatico — garante que o filtro funcione mesmo antes do banco ter dados.
+const ESTADOS_FALLBACK = [
   { sigla: "TO", nome: "Tocantins (TO)" },
-  { sigla: "PA", nome: "Pará (PA)" },
-  { sigla: "MA", nome: "Maranhão (MA)" },
-  { sigla: "GO", nome: "Goiás (GO)" },
-  { sigla: "SP", nome: "São Paulo (SP)" },
-  { sigla: "DF", nome: "Distrito Federal (DF)" },
-  { sigla: "MG", nome: "Minas Gerais (MG)" },
-  { sigla: "BA", nome: "Bahia (BA)" },
 ];
+
+const MUNICIPIOS_FALLBACK: Record<string, { value: string; label: string }[]> = {
+  TO: [
+    { value: "1721000", label: "Palmas" },
+    { value: "1702109", label: "Araguaína" },
+    { value: "1709500", label: "Gurupi" },
+    { value: "1718204", label: "Porto Nacional" },
+    { value: "1716109", label: "Paraíso do Tocantins" },
+  ],
+};
 
 const MUNICIPIOS_POR_UF: Record<string, { value: string; label: string }[]> = {
   TO: [
@@ -87,7 +92,38 @@ export default function Filtros({
   candidatos?: Candidato[];
   onChange: (novo: EstadoFiltros) => void;
 }) {
-  const municipiosDisponiveis = MUNICIPIOS_POR_UF[filtros.uf] || [];
+  // Estados dinamicos: carregados da API; fallback para lista estatica se vazia
+  const [estadosApi, setEstadosApi] = useState<{ sigla: string; nome: string }[]>([]);
+  const [municipiosApi, setMunicipiosApi] = useState<{ value: string; label: string }[]>([]);
+
+  useEffect(() => {
+    fetch("/api/dados/estados")
+      .then((r) => r.json())
+      .then((data: { sigla: string; nome: string }[]) => {
+        if (data?.length) setEstadosApi(data.map((e) => ({ sigla: e.sigla, nome: `${e.nome} (${e.sigla})` })));
+      })
+      .catch(() => {/* fallback estatico abaixo */});
+  }, []);
+
+  useEffect(() => {
+    if (!filtros.uf) return;
+    fetch(`/api/dados/municipios?uf=${filtros.uf}`)
+      .then((r) => r.json())
+      .then((data: { codigo_ibge: string; nome: string }[]) => {
+        if (data?.length)
+          setMunicipiosApi(data.map((m) => ({ value: m.codigo_ibge, label: m.nome })));
+        else
+          setMunicipiosApi([]);
+      })
+      .catch(() => setMunicipiosApi([]));
+  }, [filtros.uf]);
+
+  // Usa dados da API se disponiveis; senao usa fallback estatico
+  const estadosDisponiveis = estadosApi.length ? estadosApi : ESTADOS_FALLBACK;
+  const municipiosDisponiveis = municipiosApi.length
+    ? municipiosApi
+    : (MUNICIPIOS_FALLBACK[filtros.uf] || []);
+
   const bairrosDisponiveis = BAIRROS_EXEMPLO[filtros.municipioIbge] || [
     "Todos os Bairros",
     "Região Central",
@@ -128,17 +164,17 @@ export default function Filtros({
             value={filtros.uf}
             onChange={(e) => {
               const novaUf = e.target.value;
-              const novosMunicipios = MUNICIPIOS_POR_UF[novaUf] || [];
-              const primeiroMunicipio = novosMunicipios[0]?.value || "";
+              // O useEffect vai buscar os municipios da nova UF via API;
+              // por ora reseta para vazio e o select de cidade sera preenchido
               onChange({
                 ...filtros,
                 uf: novaUf,
-                municipioIbge: primeiroMunicipio,
+                municipioIbge: (MUNICIPIOS_FALLBACK[novaUf] || [])[0]?.value || "",
                 bairro: "Todos os Bairros",
               });
             }}
           >
-            {ESTADOS.map((uf) => (
+            {estadosDisponiveis.map((uf) => (
               <option key={uf.sigla} value={uf.sigla}>
                 {uf.nome}
               </option>
