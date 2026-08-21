@@ -177,10 +177,36 @@ export const CARGOS_ESTADUAIS: Cargo[] = [
 ];
 
 const BAIRROS_EXEMPLO: Record<string, string[]> = {
-  "1721000": ["Todos os Bairros", "Plano Diretor Sul", "Plano Diretor Norte", "Taquaralto", "Aureny III", "Jardim Taquari"],
+  // Palmas
+  "1721000": ["Todos os Bairros", "Plano Diretor Sul", "Plano Diretor Norte", "Taquaralto", "Aureny III", "Jardim Taquari", "Setor Buritis", "Santa Bárbara"],
+  // Araguaína
   "1702109": ["Todos os Bairros", "Centro", "Setor Noroeste", "Setor Maracanã", "Araguaína Sul", "Cimba", "Entroncamento"],
+  // Gurupi
   "1709500": ["Todos os Bairros", "Centro", "Setor Sol Nascente", "Parque das Acácias", "Vila Nova"],
-  "1718204": ["Todos os Bairros", "Centro", "Setor Industrial", "Vila Maranata"],
+  // Porto Nacional
+  "1718204": ["Todos os Bairros", "Centro", "Setor Industrial", "Vila Maranata", "Jardim Querência"],
+  // Paraíso do Tocantins
+  "1716109": ["Todos os Bairros", "Centro", "Setor Oeste", "Jardim América", "Aeroporto"],
+  // Araguatins
+  "1702208": ["Todos os Bairros", "Centro", "Setor Norte", "Setor Leste"],
+  // Colinas do Tocantins
+  "1705508": ["Todos os Bairros", "Centro", "Setor Sul", "Setor Norte"],
+  // Guaraí
+  "1709302": ["Todos os Bairros", "Centro", "Setor Leste", "Setor Oeste"],
+  // Miracema do Tocantins
+  "1713205": ["Todos os Bairros", "Centro", "Setor Norte", "Setor Sul"],
+  // Dianópolis
+  "1707009": ["Todos os Bairros", "Centro", "Setor Leste", "Setor Oeste"],
+  // Taguatinga
+  "1720903": ["Todos os Bairros", "Centro", "Setor Sul"],
+  // Tocantinópolis
+  "1721208": ["Todos os Bairros", "Centro", "Setor Norte", "Setor Sul"],
+  // Augustinópolis
+  "1702554": ["Todos os Bairros", "Centro", "Setor Leste"],
+  // Natividade
+  "1714203": ["Todos os Bairros", "Centro", "Setor Sul"],
+  // Demais municípios — bairros genéricos usados como fallback
+  "DEFAULT":  ["Todos os Bairros", "Centro", "Setor Norte", "Setor Sul", "Setor Leste", "Setor Oeste", "Zona Rural"],
 };
 
 const CARGOS: { value: Cargo; label: string }[] = [
@@ -205,6 +231,7 @@ export default function Filtros({
   // Estados dinamicos: carregados da API; fallback para lista estatica se vazia
   const [estadosApi, setEstadosApi] = useState<{ sigla: string; nome: string }[]>([]);
   const [municipiosApi, setMunicipiosApi] = useState<{ value: string; label: string }[]>([]);
+  const [candidatosApi, setCandidatosApi] = useState<Candidato[]>([]);
 
   useEffect(() => {
     fetch("/api/dados/estados")
@@ -227,6 +254,21 @@ export default function Filtros({
       })
       .catch(() => setMunicipiosApi([]));
   }, [filtros.uf]);
+
+  // Busca candidatos da API quando municipio, cargo ou ano mudam
+  useEffect(() => {
+    if (!filtros.municipioIbge || filtros.municipioIbge === "TOTAL") {
+      setCandidatosApi([]);
+      return;
+    }
+    fetch(`/api/dados/candidatos?municipio=${filtros.municipioIbge}&cargo=${filtros.cargo}&ano=${filtros.ano}`)
+      .then((r) => r.json())
+      .then((data: Candidato[]) => setCandidatosApi(data ?? []))
+      .catch(() => setCandidatosApi([]));
+  }, [filtros.municipioIbge, filtros.cargo, filtros.ano]);
+
+  // Candidatos: da API se disponíveis, senao usa prop passado pelo componente pai
+  const candidatosDisponiveis = candidatosApi.length ? candidatosApi : candidatos;
 
   // Usa dados da API se disponiveis; senao usa fallback estatico
   const estadosDisponiveis = estadosApi.length ? estadosApi : ESTADOS_FALLBACK;
@@ -255,15 +297,7 @@ export default function Filtros({
 
   const bairrosDisponiveis = filtros.municipioIbge === "TOTAL"
     ? ["Todos os Bairros"] // Estado inteiro não filtra por bairro
-    : BAIRROS_EXEMPLO[filtros.municipioIbge] || [
-        "Todos os Bairros",
-        "Região Central",
-        "Zona Norte",
-        "Zona Sul",
-        "Zona Leste",
-        "Zona Oeste",
-        "Zona Rural",
-      ];
+    : (BAIRROS_EXEMPLO[filtros.municipioIbge] ?? BAIRROS_EXEMPLO["DEFAULT"] ?? ["Todos os Bairros"]);
 
   function set<K extends keyof EstadoFiltros>(key: K, value: EstadoFiltros[K]) {
     onChange({ ...filtros, [key]: value });
@@ -391,7 +425,7 @@ export default function Filtros({
             onChange={(e) => set("candidatoId", e.target.value)}
           >
             <option value="">Todos / Geral</option>
-            {candidatos.map((c) => (
+            {candidatosDisponiveis.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.nome} ({c.numero})
               </option>
