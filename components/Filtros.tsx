@@ -39,38 +39,22 @@ const MUNICIPIOS_POR_UF: Record<string, { value: string; label: string }[]> = {
     { value: "1702406", label: "Araguatins" },
     { value: "1722107", label: "Xambioá" },
   ],
-  PA: [
-    { value: "1501402", label: "Belém" },
-    { value: "1504208", label: "Marabá" },
-    { value: "1506807", label: "Santarém" },
-    { value: "1505536", label: "Parauapebas" },
-  ],
-  MA: [
-    { value: "2111300", label: "São Luís" },
-    { value: "2105302", label: "Imperatriz" },
-    { value: "2103000", label: "Caxias" },
-  ],
-  GO: [
-    { value: "5208707", label: "Goiânia" },
-    { value: "5201405", label: "Aparecida de Goiânia" },
-    { value: "5201108", label: "Anápolis" },
-  ],
-  SP: [
-    { value: "3550308", label: "São Paulo" },
-    { value: "3509502", label: "Campinas" },
-    { value: "3549805", label: "São José dos Campos" },
-  ],
-  DF: [{ value: "5300108", label: "Brasília" }],
-  MG: [{ value: "3106200", label: "Belo Horizonte" }],
-  BA: [{ value: "2927408", label: "Salvador" }],
 };
+
+// Cargos que abrangem o estado inteiro (não se limitam a um único município)
+export const CARGOS_ESTADUAIS: Cargo[] = [
+  "GOVERNADOR",
+  "DEPUTADO_ESTADUAL",
+  "DEPUTADO_FEDERAL",
+  "SENADOR",
+  "PRESIDENTE",
+];
 
 const BAIRROS_EXEMPLO: Record<string, string[]> = {
   "1721000": ["Todos os Bairros", "Plano Diretor Sul", "Plano Diretor Norte", "Taquaralto", "Aureny III", "Jardim Taquari"],
   "1702109": ["Todos os Bairros", "Centro", "Setor Noroeste", "Setor Maracanã", "Araguaína Sul", "Cimba", "Entroncamento"],
   "1709500": ["Todos os Bairros", "Centro", "Setor Sol Nascente", "Parque das Acácias", "Vila Nova"],
-  "1504208": ["Todos os Bairros", "Nova Marabá", "Marabá Pioneira", "Cidade Nova", "São Félix"],
-  "2105302": ["Todos os Bairros", "Centro", "Bacuri", "Nova Imperatriz", "Santa Rita"],
+  "1718204": ["Todos os Bairros", "Centro", "Setor Industrial", "Vila Maranata"],
 };
 
 const CARGOS: { value: Cargo; label: string }[] = [
@@ -120,19 +104,40 @@ export default function Filtros({
 
   // Usa dados da API se disponiveis; senao usa fallback estatico
   const estadosDisponiveis = estadosApi.length ? estadosApi : ESTADOS_FALLBACK;
-  const municipiosDisponiveis = municipiosApi.length
+  const municipiosBase = municipiosApi.length
     ? municipiosApi
     : (MUNICIPIOS_FALLBACK[filtros.uf] || []);
 
-  const bairrosDisponiveis = BAIRROS_EXEMPLO[filtros.municipioIbge] || [
-    "Todos os Bairros",
-    "Região Central",
-    "Zona Norte",
-    "Zona Sul",
-    "Zona Leste",
-    "Zona Oeste",
-    "Zona Rural",
-  ];
+  // Para cargos estaduais/federais: adiciona opção "Estado Inteiro (Total)"
+  // que compila os votos de todos os municípios do estado
+  const isCargoEstadual = CARGOS_ESTADUAIS.includes(filtros.cargo as any);
+  const municipiosDisponiveis = isCargoEstadual
+    ? [{ value: "TOTAL", label: `📊 Estado Inteiro (Total)` }, ...municipiosBase]
+    : municipiosBase;
+
+  // Quando troca para cargo estadual e não tem TOTAL selecionado, seleciona automaticamente
+  useEffect(() => {
+    if (isCargoEstadual && filtros.municipioIbge !== "TOTAL") {
+      onChange({ ...filtros, municipioIbge: "TOTAL", bairro: "Todos os Bairros" });
+    }
+    if (!isCargoEstadual && filtros.municipioIbge === "TOTAL") {
+      const primeiro = municipiosBase[0]?.value || "";
+      onChange({ ...filtros, municipioIbge: primeiro, bairro: "Todos os Bairros" });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filtros.cargo]);
+
+  const bairrosDisponiveis = filtros.municipioIbge === "TOTAL"
+    ? ["Todos os Bairros"] // Estado inteiro não filtra por bairro
+    : BAIRROS_EXEMPLO[filtros.municipioIbge] || [
+        "Todos os Bairros",
+        "Região Central",
+        "Zona Norte",
+        "Zona Sul",
+        "Zona Leste",
+        "Zona Oeste",
+        "Zona Rural",
+      ];
 
   function set<K extends keyof EstadoFiltros>(key: K, value: EstadoFiltros[K]) {
     onChange({ ...filtros, [key]: value });
